@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Check } from "lucide-react"
 
 interface ApplicationCardProps {
-  type: "alpha" | "developer"
+  type: "beta" | "developer"
   onClose: () => void
 }
 
@@ -83,8 +83,8 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
           <CardContent className="flex flex-col items-center justify-center p-6">
             <Check className="w-16 h-16 text-green-500 mb-4" />
             <p className="text-lg font-semibold text-center">
-              {type === "alpha"
-                ? "Acknowledged! You will be informed when Modo is ready for alpha testing."
+              {type === "beta"
+                ? "Acknowledged! You will be informed when Modo is ready for beta testing."
                 : "Acknowledged! You will be informed when availability has opened up."}
             </p>
           </CardContent>
@@ -97,9 +97,9 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <Card className="w-full max-w-md animate-in slide-in-from-bottom duration-300">
         <CardHeader>
-          <CardTitle>{type === "alpha" ? "Apply for Alpha Testing" : "Apply as a Developer"}</CardTitle>
+          <CardTitle>{type === "beta" ? "Apply for Beta Testing" : "Apply as a Developer"}</CardTitle>
           <CardDescription>
-            {type === "alpha" ? "Be among the first to experience Modo" : "Join our team and help build Modo"}
+            {type === "beta" ? "Be among the first to experience Modo" : "Join our team and help build Modo"}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>

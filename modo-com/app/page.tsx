@@ -24,7 +24,7 @@ function MyImage() {
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
-  const [showAlphaCard, setShowAlphaCard] = useState(false)
+  const [showBetaCard, setShowBetaCard] = useState(false)
   const [showDeveloperCard, setShowDeveloperCard] = useState(false)
   const aboutSectionRef = useRef<HTMLElement>(null)
 
@@ -111,15 +111,15 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-8">
               <Card>
                 <CardHeader>
-                  <CardTitle>Join as an Alpha Tester</CardTitle>
+                  <CardTitle>Join as a Beta Tester</CardTitle>
                   <CardDescription>Be among the first to experience Modo</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="mb-4">
-                    Help shape the future of Modo by providing valuable feedback during our alpha testing phase.
+                    Help shape the future of Modo by providing valuable feedback during our beta testing phase.
                   </p>
-                  <Button className="w-full" onClick={() => setShowAlphaCard(true)}>
-                    Apply for Alpha Testing
+                  <Button className="w-full" onClick={() => setShowBetaCard(true)}>
+                    Apply for Beta Testing
                   </Button>
                 </CardContent>
               </Card>
@@ -158,7 +158,7 @@ export default function Home() {
         </div>
       </footer>
 
-      {showAlphaCard && <ApplicationCard type="alpha" onClose={() => setShowAlphaCard(false)} />}
+      {showBetaCard && <ApplicationCard type="beta" onClose={() => setShowBetaCard(false)} />}
       {showDeveloperCard && <ApplicationCard type="developer" onClose={() => setShowDeveloperCard(false)} />}
     </div>
   )
