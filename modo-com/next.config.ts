@@ -1,9 +1,14 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   images: {
-    disableStaticImages: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'github.com',
+      },
+    ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig
