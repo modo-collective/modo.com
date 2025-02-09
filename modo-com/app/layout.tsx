@@ -6,7 +6,7 @@ import type React from "react" // Import React
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Modo",
+  title: "The Modo Collective",
   description: "Modo is a social media platform designed for artists, by artists. Stop scrolling, start creating.",
 }
 
