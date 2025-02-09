@@ -57,6 +57,7 @@ const DynamicBackground: React.FC = () => {
       }
 
       draw() {
+        if (!ctx) return;
         ctx.beginPath()
         ctx.moveTo(this.points[0].x, this.points[0].y)
         for (let i = 1; i < this.points.length; i++) {
@@ -117,6 +118,7 @@ const DynamicBackground: React.FC = () => {
       }
 
       draw() {
+        if (!ctx) return;
         ctx.fillStyle = "rgba(50, 50, 50, 0.8)" // Dark gray with some transparency
         ctx.strokeStyle = "rgba(50, 50, 50, 0.8)" // Match stroke color to fill color
 
@@ -348,6 +350,7 @@ const DynamicBackground: React.FC = () => {
       }
 
       draw() {
+        if (!ctx) return;
         ctx.font = "20px Arial"
         ctx.fillStyle = `rgba(0, 0, 0, ${this.opacity})`
         ctx.fillText(this.emoji, this.x, this.y)
