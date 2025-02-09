@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface Point {
   x: number
@@ -13,8 +13,8 @@ interface Line {
   speed: number
   direction: Point
   curveChance: number
-  draw: () => void
-  update: () => void
+  draw: (ctx: CanvasRenderingContext2D) => void
+  update: (width: number, height: number) => void
   getRandomDirection: () => Point
 }
 
@@ -24,8 +24,8 @@ interface Silhouette {
   speed: number
   size: number
   direction: number
-  draw: () => void
-  update: () => void
+  draw: (ctx: CanvasRenderingContext2D) => void
+  update: (width: number, height: number) => void
 }
 
 interface Emoji {
@@ -34,12 +34,27 @@ interface Emoji {
   emoji: string
   opacity: number
   speed: number
-  draw: () => void
+  draw: (ctx: CanvasRenderingContext2D) => void
   update: () => void
 }
 
 const DynamicBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
+    }
+
+    updateDimensions()
+    window.addEventListener("resize", updateDimensions)
+
+    return () => window.removeEventListener("resize", updateDimensions)
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -48,8 +63,8 @@ const DynamicBackground = () => {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    canvas.width = dimensions.width
+    canvas.height = dimensions.height
 
     const lines: Line[] = []
     const silhouettes: Silhouette[] = []
@@ -63,8 +78,8 @@ const DynamicBackground = () => {
       direction: Point
       curveChance: number
 
-      constructor() {
-        this.points = [{ x: Math.random() * canvas.width, y: Math.random() * canvas.height }]
+      constructor(width: number, height: number) {
+        this.points = [{ x: Math.random() * width, y: Math.random() * height }]
         this.color = `hsl(${Math.random() * 360}, 50%, 50%)`
         this.speed = Math.random() * 0.5 + 0.1
         this.direction = this.getRandomDirection()
@@ -76,8 +91,7 @@ const DynamicBackground = () => {
         return { x: Math.cos(angle), y: Math.sin(angle) }
       }
 
-      draw() {
-        if (!ctx) return
+      draw(ctx: CanvasRenderingContext2D) {
         ctx.beginPath()
         ctx.moveTo(this.points[0].x, this.points[0].y)
         for (let i = 1; i < this.points.length; i++) {
@@ -88,7 +102,7 @@ const DynamicBackground = () => {
         ctx.stroke()
       }
 
-      update() {
+      update(width: number, height: number) {
         const lastPoint = this.points[this.points.length - 1]
         const newX = lastPoint.x + this.direction.x * this.speed
         const newY = lastPoint.y + this.direction.y * this.speed
@@ -97,8 +111,8 @@ const DynamicBackground = () => {
           this.direction = this.getRandomDirection()
         }
 
-        if (newX < 0 || newX > canvas.width || newY < 0 || newY > canvas.height) {
-          this.points = [{ x: Math.random() * canvas.width, y: Math.random() * canvas.height }]
+        if (newX < 0 || newX > width || newY < 0 || newY > height) {
+          this.points = [{ x: Math.random() * width, y: Math.random() * height }]
           this.direction = this.getRandomDirection()
         } else {
           this.points.push({ x: newX, y: newY })
@@ -106,8 +120,6 @@ const DynamicBackground = () => {
             this.points.shift()
           }
         }
-
-        this.draw()
       }
     }
 
@@ -118,16 +130,15 @@ const DynamicBackground = () => {
       size: number
       direction: number
 
-      constructor() {
+      constructor(width: number, height: number) {
         this.direction = Math.random() < 0.5 ? -1 : 1
-        this.x = this.direction === 1 ? -50 : canvas.width + 50
-        this.y = canvas.height - Math.random() * (canvas.height / 2)
+        this.x = this.direction === 1 ? -50 : width + 50
+        this.y = height - Math.random() * (height / 2)
         this.speed = (Math.random() * 0.5 + 0.5) * this.direction
         this.size = Math.random() * 15 + 25
       }
 
-      draw() {
-        if (!ctx) return
+      draw(ctx: CanvasRenderingContext2D) {
         ctx.fillStyle = "rgba(50, 50, 50, 0.8)"
         ctx.strokeStyle = "rgba(50, 50, 50, 0.8)"
 
@@ -166,14 +177,13 @@ const DynamicBackground = () => {
         ctx.stroke()
       }
 
-      update() {
+      update(width: number, height: number) {
         this.x += this.speed
-        if (this.direction === 1 && this.x > canvas.width + 50) {
+        if (this.direction === 1 && this.x > width + 50) {
           this.x = -50
         } else if (this.direction === -1 && this.x < -50) {
-          this.x = canvas.width + 50
+          this.x = width + 50
         }
-        this.draw()
       }
     }
 
@@ -197,8 +207,7 @@ const DynamicBackground = () => {
         return emojis[Math.floor(Math.random() * emojis.length)]
       }
 
-      draw() {
-        if (!ctx) return
+      draw(ctx: CanvasRenderingContext2D) {
         ctx.font = "20px Arial"
         ctx.fillStyle = `rgba(0, 0, 0, ${this.opacity})`
         ctx.fillText(this.emoji, this.x, this.y)
@@ -207,17 +216,16 @@ const DynamicBackground = () => {
       update() {
         this.y -= this.speed
         this.opacity -= 0.02
-        this.draw()
       }
     }
 
     for (let i = 0; i < 40; i++) {
-      lines.push(new LineClass())
+      lines.push(new LineClass(dimensions.width, dimensions.height))
     }
 
     const silhouetteCount = Math.floor(30 * 1.25)
     for (let i = 0; i < silhouetteCount; i++) {
-      silhouettes.push(new SilhouetteClass())
+      silhouettes.push(new SilhouetteClass(dimensions.width, dimensions.height))
     }
 
     function checkInteractions() {
@@ -247,17 +255,25 @@ const DynamicBackground = () => {
     let animationFrameId: number
 
     function animate() {
-      if (!ctx) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, dimensions.width, dimensions.height)
 
-      lines.forEach((line) => line.update())
-      silhouettes.forEach((silhouette) => silhouette.update())
+      lines.forEach((line) => {
+        line.update(dimensions.width, dimensions.height)
+        line.draw(ctx)
+      })
+
+      silhouettes.forEach((silhouette) => {
+        silhouette.update(dimensions.width, dimensions.height)
+        silhouette.draw(ctx)
+      })
+
       checkInteractions()
 
-      emojis.forEach((emoji, index) => {
+      emojis.forEach((emoji, index, array) => {
         emoji.update()
+        emoji.draw(ctx)
         if (emoji.opacity <= 0) {
-          emojis.splice(index, 1)
+          array.splice(index, 1)
         }
       })
 
@@ -266,20 +282,12 @@ const DynamicBackground = () => {
 
     animate()
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-
-    window.addEventListener("resize", handleResize)
-
     return () => {
-      window.removeEventListener("resize", handleResize)
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId)
       }
     }
-  }, [])
+  }, [dimensions])
 
   return <canvas ref={canvasRef} className="absolute top-0 left-0 w-full h-full" />
 }
