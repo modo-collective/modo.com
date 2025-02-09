@@ -7,20 +7,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { ChevronDown } from "lucide-react"
 import { ApplicationCard } from "@/components/ApplicationCard"
 import Image from "next/image"
-import modoImage from './modo-no-background.png'
-import imageLoader from '../imageLoader';
-
-function MyImage() {
-  return (
-    <Image
-      loader={imageLoader}
-      src="/my-image.jpg"
-      alt="My Image"
-      width={500}
-      height={300}
-    />
-  );
-}
+import modoImage from '../public/modo-no-background.png'
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
