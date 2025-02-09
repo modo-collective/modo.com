@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { ChevronDown } from "lucide-react"
 import { ApplicationCard } from "@/components/ApplicationCard"
 import Image from "next/image"
-import modoImage from '../public/modo-no-background.png'
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
@@ -46,7 +45,7 @@ export default function Home() {
         <section className="min-h-screen flex flex-col items-center justify-center text-white px-4">
           <div className="mb-8 w-64 h-64 relative">
             <Image
-              src={modoImage}
+              src="https://raw.githubusercontent.com/modo-collective/modo.com/refs/heads/main/modo-com/public/modo-no-background.png"
               alt="Modo Logo"
               fill
               priority
