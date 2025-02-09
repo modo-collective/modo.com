@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { ChevronDown } from "lucide-react"
 import { ApplicationCard } from "@/components/ApplicationCard"
 import Image from "next/image"
+import modoImage from './modo-no-background.png'
 import imageLoader from '../imageLoader';
 
 function MyImage() {
@@ -58,7 +59,7 @@ export default function Home() {
         <section className="min-h-screen flex flex-col items-center justify-center text-white px-4">
           <div className="mb-8 w-64 h-64 relative">
             <Image
-              src="/modo-no-background.png"
+              src={modoImage}
               alt="Modo Logo"
               fill
               priority
