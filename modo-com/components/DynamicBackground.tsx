@@ -13,8 +13,12 @@ const DynamicBackground: React.FC = () => {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    const handleResize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+
+    handleResize(); // Initialize canvas size
 
     const lines: Line[] = []
     const silhouettes: Silhouette[] = []
@@ -26,14 +30,12 @@ const DynamicBackground: React.FC = () => {
       color: string
       speed: number
       direction: { x: number; y: number }
-      curveChance: number
 
       constructor() {
         this.points = [{ x: Math.random() * canvas.width, y: Math.random() * canvas.height }]
         this.color = `hsl(${Math.random() * 360}, 50%, 50%)`
         this.speed = Math.random() * 0.5 + 0.1
         this.direction = this.getRandomDirection()
-        this.curveChance = 0.1 // 10% chance to curve at each point
       }
 
       getRandomDirection() {
@@ -58,7 +60,7 @@ const DynamicBackground: React.FC = () => {
         const newY = lastPoint.y + this.direction.y * this.speed
 
         // Occasionally curve
-        if (Math.random() < this.curveChance) {
+        if (Math.random() < 0.1) {
           this.direction = this.getRandomDirection()
         }
 
@@ -114,7 +116,7 @@ const DynamicBackground: React.FC = () => {
         ctx.beginPath()
         ctx.moveTo(this.x - hipWidth / 2, this.y + this.size / 6)
         ctx.lineTo(
-          this.x - hipWidth / 2 + Math.sin(legPhase) * legLength * Math.sin(maxLegSwing),
+          this.x - hipWidth / 2 + Math.sin(legPhase) * legLength * Math.sin(Math.PI / 6),
           this.y + this.size / 6 + Math.abs(Math.cos(legPhase)) * legLength,
         )
         ctx.lineWidth = 4
@@ -124,7 +126,7 @@ const DynamicBackground: React.FC = () => {
         ctx.beginPath()
         ctx.moveTo(this.x + hipWidth / 2, this.y + this.size / 6)
         ctx.lineTo(
-          this.x + hipWidth / 2 + Math.sin(legPhase + Math.PI) * legLength * Math.sin(maxLegSwing),
+          this.x + hipWidth / 2 + Math.sin(legPhase + Math.PI) * legLength * Math.sin(Math.PI / 6),
           this.y + this.size / 6 + Math.abs(Math.cos(legPhase + Math.PI)) * legLength,
         )
         ctx.lineWidth = 4
@@ -387,11 +389,6 @@ const DynamicBackground: React.FC = () => {
     }
 
     animate()
-
-    const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
 
     window.addEventListener("resize", handleResize)
 
