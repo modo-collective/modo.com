@@ -1,23 +1,52 @@
 "use client"
 
-import type React from "react"
 import { useEffect, useRef } from "react"
 
-const DynamicBackground: React.FC = () => {
+interface Point {
+  x: number
+  y: number
+}
+
+interface Line {
+  points: Point[]
+  color: string
+  speed: number
+  direction: Point
+  curveChance: number
+  draw: () => void
+  update: () => void
+  getRandomDirection: () => Point
+}
+
+interface Silhouette {
+  x: number
+  y: number
+  speed: number
+  size: number
+  direction: number
+  draw: () => void
+  update: () => void
+}
+
+interface Emoji {
+  x: number
+  y: number
+  emoji: string
+  opacity: number
+  speed: number
+  draw: () => void
+  update: () => void
+}
+
+const DynamicBackground = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) {
-      console.error("Canvas element not found") // Log an error in case it's not found
-      return // Exit the useEffect if canvas is null
-    }
+    if (!canvas) return
 
     const ctx = canvas.getContext("2d")
-    if (!ctx) {
-      console.error("Could not get 2D rendering context")
-      return // Exit if context is null
-    }
+    if (!ctx) return
 
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
@@ -27,37 +56,28 @@ const DynamicBackground: React.FC = () => {
     const emojis: Emoji[] = []
     const collisionPairs = new Set<string>()
 
-    class Line {
-      points: { x: number; y: number }[]
+    class LineClass implements Line {
+      points: Point[]
       color: string
       speed: number
-      direction: { x: number; y: number }
+      direction: Point
       curveChance: number
 
       constructor() {
-        if (!canvas) {
-          console.error("Canvas is null in Line constructor") // Add error logging
-          this.points = [] // Provide a default value to avoid further errors
-          this.color = "black" // Provide a default color
-          this.speed = 0
-          this.direction = { x: 0, y: 0 }
-          this.curveChance = 0
-          return // Exit the constructor to prevent further errors
-        }
         this.points = [{ x: Math.random() * canvas.width, y: Math.random() * canvas.height }]
         this.color = `hsl(${Math.random() * 360}, 50%, 50%)`
         this.speed = Math.random() * 0.5 + 0.1
         this.direction = this.getRandomDirection()
-        this.curveChance = 0.1 // 10% chance to curve at each point
+        this.curveChance = 0.1
       }
 
-      getRandomDirection() {
+      getRandomDirection(): Point {
         const angle = Math.random() * Math.PI * 2
         return { x: Math.cos(angle), y: Math.sin(angle) }
       }
 
       draw() {
-        if (!ctx) return;
+        if (!ctx) return
         ctx.beginPath()
         ctx.moveTo(this.points[0].x, this.points[0].y)
         for (let i = 1; i < this.points.length; i++) {
@@ -73,13 +93,11 @@ const DynamicBackground: React.FC = () => {
         const newX = lastPoint.x + this.direction.x * this.speed
         const newY = lastPoint.y + this.direction.y * this.speed
 
-        // Occasionally curve
         if (Math.random() < this.curveChance) {
           this.direction = this.getRandomDirection()
         }
 
         if (newX < 0 || newX > canvas.width || newY < 0 || newY > canvas.height) {
-          // Reset the line if it goes off-screen
           this.points = [{ x: Math.random() * canvas.width, y: Math.random() * canvas.height }]
           this.direction = this.getRandomDirection()
         } else {
@@ -93,7 +111,7 @@ const DynamicBackground: React.FC = () => {
       }
     }
 
-    class Silhouette {
+    class SilhouetteClass implements Silhouette {
       x: number
       y: number
       speed: number
@@ -101,26 +119,17 @@ const DynamicBackground: React.FC = () => {
       direction: number
 
       constructor() {
-        if (!canvas) {
-          console.error("Canvas is null in Silhouette constructor")
-          this.direction = 0
-          this.x = 0
-          this.y = 0
-          this.speed = 0
-          this.size = 0
-          return
-        }
-        this.direction = Math.random() < 0.5 ? -1 : 1 // -1 for left, 1 for right
-        this.x = this.direction === 1 ? -50 : canvas.width + 50 // Start off-screen
-        this.y = canvas.height - Math.random() * (canvas.height / 2) // Bottom half of the screen
+        this.direction = Math.random() < 0.5 ? -1 : 1
+        this.x = this.direction === 1 ? -50 : canvas.width + 50
+        this.y = canvas.height - Math.random() * (canvas.height / 2)
         this.speed = (Math.random() * 0.5 + 0.5) * this.direction
-        this.size = Math.random() * 15 + 25 // Random size between 25 and 40
+        this.size = Math.random() * 15 + 25
       }
 
       draw() {
-        if (!ctx) return;
-        ctx.fillStyle = "rgba(50, 50, 50, 0.8)" // Dark gray with some transparency
-        ctx.strokeStyle = "rgba(50, 50, 50, 0.8)" // Match stroke color to fill color
+        if (!ctx) return
+        ctx.fillStyle = "rgba(50, 50, 50, 0.8)"
+        ctx.strokeStyle = "rgba(50, 50, 50, 0.8)"
 
         // Head
         ctx.beginPath()
@@ -134,7 +143,7 @@ const DynamicBackground: React.FC = () => {
         const legPhase = (Date.now() / 200) % (Math.PI * 2)
         const legLength = this.size / 3
         const hipWidth = this.size / 4
-        const maxLegSwing = Math.PI / 6 // Reduced from default PI/2 for more realistic movement
+        const maxLegSwing = Math.PI / 6
 
         // Left leg
         ctx.beginPath()
@@ -160,15 +169,15 @@ const DynamicBackground: React.FC = () => {
       update() {
         this.x += this.speed
         if (this.direction === 1 && this.x > canvas.width + 50) {
-          this.x = -50 // Reset to the left when it goes off-screen
+          this.x = -50
         } else if (this.direction === -1 && this.x < -50) {
-          this.x = canvas.width + 50 // Reset to the right when it goes off-screen
+          this.x = canvas.width + 50
         }
         this.draw()
       }
     }
 
-    class Emoji {
+    class EmojiClass implements Emoji {
       x: number
       y: number
       emoji: string
@@ -183,174 +192,13 @@ const DynamicBackground: React.FC = () => {
         this.speed = Math.random() * 0.5 + 0.5
       }
 
-      getRandomEmoji() {
-        const emojis = [
-          "😊",
-          "👋",
-          "🎉",
-          "💡",
-          "🌟",
-          "🤔",
-          "👍",
-          "🙌",
-          "💪",
-          "🚀",
-          "😂",
-          "🤣",
-          "❤️",
-          "😍",
-          "🙏",
-          "😭",
-          "😎",
-          "😅",
-          "🔥",
-          "🥰",
-          "😁",
-          "🤗",
-          "😆",
-          "🤩",
-          "😘",
-          "🥳",
-          "🤔",
-          "🤷",
-          "🙄",
-          "😏",
-          "😋",
-          "😜",
-          "😇",
-          "🥺",
-          "💖",
-          "💞",
-          "💘",
-          "✨",
-          "🎶",
-          "🎵",
-          "🤝",
-          "👏",
-          "🤞",
-          "🤙",
-          "💃",
-          "🕺",
-          "👀",
-          "💁",
-          "🙆",
-          "🙅",
-          "🎊",
-          "🎁",
-          "🍕",
-          "🍔",
-          "🍟",
-          "🍩",
-          "☕",
-          "🍷",
-          "🍺",
-          "🎂",
-          "🐶",
-          "🐱",
-          "🐼",
-          "🐨",
-          "🐸",
-          "🐰",
-          "🦊",
-          "🐻",
-          "🐥",
-          "🦄",
-          "🌍",
-          "🌞",
-          "🌈",
-          "⛄",
-          "🌊",
-          "🌸",
-          "🌻",
-          "🎨",
-          "🎭",
-          "🎮",
-          "🏆",
-          "🥇",
-          "🎯",
-          "🕹️",
-          "📱",
-          "💻",
-          "⌚",
-          "🎧",
-          "📸",
-          "🎥",
-          "🚗",
-          "🚲",
-          "🚄",
-          "🚢",
-          "✈️",
-          "🛸",
-          "🚦",
-          "🏠",
-          "🏖️",
-          "🏰",
-          "🗺️",
-          "🌆",
-          "🛒",
-          "🔑",
-          "💰",
-          "💎",
-          "📚",
-          "📝",
-          "✍️",
-          "📢",
-          "🔔",
-          "🔊",
-          "🎙️",
-          "📅",
-          "🕰️",
-          "⏳",
-          "💣",
-          "⚡",
-          "💀",
-          "👻",
-          "🎃",
-          "🤡",
-          "👑",
-          "🎩",
-          "🕶️",
-          "👓",
-          "🥽",
-          "🥼",
-          "🎽",
-          "👜",
-          "👠",
-          "👟",
-          "🧥",
-          "👗",
-          "🎸",
-          "🎺",
-          "🥁",
-          "🎻",
-          "🎷",
-          "🎹",
-          "🖥️",
-          "🖨️",
-          "📡",
-          "🔭",
-          "🛠️",
-          "🔧",
-          "🔨",
-          "⛏️",
-          "⚙️",
-          "🧲",
-          "🛎️",
-          "🚪",
-          "🛏️",
-          "🚿",
-          "🛁",
-          "🍽️",
-          "🍴",
-          "🥄",
-          "🔪",
-          "🏹",
-        ]
+      getRandomEmoji(): string {
+        const emojis = ["😊", "👋", "🎨", "✨", "🎭", "🖼️", "🎪", "🎯", "🎪", "🎨"]
         return emojis[Math.floor(Math.random() * emojis.length)]
       }
 
       draw() {
-        if (!ctx) return;
+        if (!ctx) return
         ctx.font = "20px Arial"
         ctx.fillStyle = `rgba(0, 0, 0, ${this.opacity})`
         ctx.fillText(this.emoji, this.x, this.y)
@@ -363,15 +211,13 @@ const DynamicBackground: React.FC = () => {
       }
     }
 
-    // Increase the number of lines from 20 to 40
     for (let i = 0; i < 40; i++) {
-      lines.push(new Line())
+      lines.push(new LineClass())
     }
 
-    // Create silhouettes (25% more than before, which was 30)
     const silhouetteCount = Math.floor(30 * 1.25)
     for (let i = 0; i < silhouetteCount; i++) {
-      silhouettes.push(new Silhouette())
+      silhouettes.push(new SilhouetteClass())
     }
 
     function checkInteractions() {
@@ -386,11 +232,10 @@ const DynamicBackground: React.FC = () => {
               if (!collisionPairs.has(pairId) && Math.random() < 0.5) {
                 const midX = (s1.x + s2.x) / 2
                 const midY = Math.min(s1.y, s2.y) - 20
-                emojis.push(new Emoji(midX, midY))
+                emojis.push(new EmojiClass(midX, midY))
                 collisionPairs.add(pairId)
               }
             } else if (distance > 20) {
-              // Reset collision pair when silhouettes are far apart
               const pairId = `${Math.min(i, j)}-${Math.max(i, j)}`
               collisionPairs.delete(pairId)
             }
@@ -399,26 +244,29 @@ const DynamicBackground: React.FC = () => {
       }
     }
 
-    function animate() {
-      if (!canvas || !ctx) return // Double check before using canvas or ctx
+    let animationFrameId: number
 
+    function animate() {
+      if (!ctx) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
+
       lines.forEach((line) => line.update())
       silhouettes.forEach((silhouette) => silhouette.update())
       checkInteractions()
+
       emojis.forEach((emoji, index) => {
         emoji.update()
         if (emoji.opacity <= 0) {
           emojis.splice(index, 1)
         }
       })
-      requestAnimationFrame(animate)
+
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     const handleResize = () => {
-      if (!canvas) return; // Check if canvas exists before resize
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
@@ -427,6 +275,9 @@ const DynamicBackground: React.FC = () => {
 
     return () => {
       window.removeEventListener("resize", handleResize)
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+      }
     }
   }, [])
 
