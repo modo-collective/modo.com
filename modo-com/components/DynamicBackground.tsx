@@ -181,8 +181,10 @@ const DynamicBackground = () => {
         this.x += this.speed
         if (this.direction === 1 && this.x > width + 50) {
           this.x = -50
+          this.y = height - Math.random() * (height / 2) // Randomize y position when resetting
         } else if (this.direction === -1 && this.x < -50) {
           this.x = width + 50
+          this.y = height - Math.random() * (height / 2) // Randomize y position when resetting
         }
       }
     }
@@ -293,3 +295,4 @@ const DynamicBackground = () => {
 }
 
 export default DynamicBackground
+
