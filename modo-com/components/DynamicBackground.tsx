@@ -257,6 +257,7 @@ const DynamicBackground = () => {
     let animationFrameId: number
 
     function animate() {
+      if (!ctx) return
       ctx.clearRect(0, 0, dimensions.width, dimensions.height)
 
       lines.forEach((line) => {
