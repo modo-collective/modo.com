@@ -80,9 +80,10 @@ export default function Home() {
             <h4 className="text-xl font-semibold mb-2">Key Features:</h4>
             <ul className="list-disc list-inside mb-4">
               <li>Customizable portfolios</li>
-              <li>Collaborative tools for artists</li>
-              <li>Art-focused feed with minimal distractions</li>
-              <li>Opportunities to connect with art enthusiasts and potential clients</li>
+              <li>Collaboration-first tools</li>
+              <li>Art-focused distraction-free feed</li>
+              <li>Opportunities to connect with artists and clients</li>
+              <li>Committed to data minimisation</li>
             </ul>
             <p className="mb-2">
               Join us in revolutionizing the way artists interact online. Stop scrolling, start creating with Modo.
