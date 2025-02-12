@@ -7,6 +7,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { ChevronDown } from "lucide-react"
 import { ApplicationCard } from "@/components/ApplicationCard"
 import Image from "next/image"
+import { motion } from "framer-motion"
+import ScrollingBanner from "@/components/ScrollingBanner"
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false)
@@ -32,6 +34,8 @@ export default function Home() {
         <DynamicBackground />
         <div className="absolute inset-0 bg-black bg-opacity-50" />
       </div>
+
+      <ScrollingBanner />
 
       <header
         className={`fixed top-0 left-0 right-0 z-20 transition-all duration-300 ${scrolled ? "bg-black bg-opacity-70 py-2" : "bg-transparent py-4"}`}
