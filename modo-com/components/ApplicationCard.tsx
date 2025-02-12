@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Check } from "lucide-react"
+import { Check, Loader2 } from "lucide-react"
 
 interface ApplicationCardProps {
-  type: "beta" | "developer"
+  type: "alpha" | "developer"
   onClose: () => void
 }
 
@@ -25,6 +25,7 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [attemptedSubmit, setAttemptedSubmit] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {}
@@ -55,14 +56,18 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
     return newErrors
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setAttemptedSubmit(true)
     const formErrors = validateForm()
     setErrors(formErrors)
 
     if (Object.keys(formErrors).length === 0) {
+      setIsLoading(true)
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       console.log("Submitted:", { type, firstName, lastName, email, role, portfolioLink, resumeFile, githubProfile })
+      setIsLoading(false)
       setIsSubmitted(true)
       setTimeout(() => {
         onClose()
@@ -83,8 +88,8 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
           <CardContent className="flex flex-col items-center justify-center p-6">
             <Check className="w-16 h-16 text-green-500 mb-4" />
             <p className="text-lg font-semibold text-center">
-              {type === "beta"
-                ? "Acknowledged! You will be informed when Modo is ready for beta testing."
+              {type === "alpha"
+                ? "Acknowledged! You will be informed when Modo is ready for alpha testing."
                 : "Acknowledged! You will be informed when availability has opened up."}
             </p>
           </CardContent>
@@ -97,9 +102,9 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <Card className="w-full max-w-md animate-in slide-in-from-bottom duration-300">
         <CardHeader>
-          <CardTitle>{type === "beta" ? "Apply for Beta Testing" : "Apply as a Developer"}</CardTitle>
+          <CardTitle>{type === "alpha" ? "Apply for Alpha Testing" : "Apply as a Developer"}</CardTitle>
           <CardDescription>
-            {type === "beta" ? "Be among the first to experience Modo" : "Join our team and help build Modo"}
+            {type === "alpha" ? "Be among the first to experience Modo" : "Join our team and help build Modo"}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -203,7 +208,16 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Submit Application</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </>
+              ) : (
+                "Submit Application"
+              )}
+            </Button>
           </CardFooter>
         </form>
       </Card>
