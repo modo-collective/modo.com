@@ -7,7 +7,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { ChevronDown } from "lucide-react"
 import { ApplicationCard } from "@/components/ApplicationCard"
 import Image from "next/image"
-import { motion } from "framer-motion"
 import ScrollingBanner from "@/components/ScrollingBanner"
 
 export default function Home() {
