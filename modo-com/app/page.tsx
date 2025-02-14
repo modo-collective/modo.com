@@ -82,7 +82,7 @@ export default function Home() {
               fellow creatives, and find inspiration. 
             </p>
             <p className="mb-4">
-               Modo's mission is to be your space where creativity thrives and artists can focus on what fulfills them the most -
+               Modo&apos;s mission is to be your space where creativity thrives and artists can focus on what fulfills them the most -
                creating. We are the sum of what we consume. Mindfully consume allows us to rekindle your love for creation.
             </p>
             <h4 className="text-xl font-semibold mb-2">Key Features:</h4>
