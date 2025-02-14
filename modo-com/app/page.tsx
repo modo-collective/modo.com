@@ -71,25 +71,32 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-8">About Modo</h2>
             <h3 className="text-2xl font-semibold mb-4">An app for artists, by artists</h3>
             <p className="mb-4">
-              Modo is a social networking platform designed specifically for artists to showcase their work, connect
-              with fellow creatives, and find inspiration. Where the modern social media app is defined by algorithms
-              and mindless scrolling, Modo calls its users to find the quiet within the noise.
+              Modern social media apps are broken. Feeds are defined by algorithms, mindless scrolling and constant 
+              consumption of disposable media. 
             </p>
             <p className="mb-4">
-              Our mission is to create a space where creativity thrives and artists can focus on what makes them
-              happiest and what they do best: creating. Unlike traditional social media platforms, Modo puts the
-              emphasis on the art itself, not on endless scrolling.
+              Modo calls its users to find the quiet within the noise.
+            </p>
+            <p className="mb-4">
+              Modo is the ethical social networking platform for artists to showcase their work, connect with 
+              fellow creatives, and find inspiration. 
+            </p>
+            <p className="mb-4">
+               Modo's mission is to be your space where creativity thrives and artists can focus on what fulfills them the most -
+               creating. We are the sum of what we consume. Mindfully consume allows us to rekindle your love for creation.
             </p>
             <h4 className="text-xl font-semibold mb-2">Key Features:</h4>
             <ul className="list-disc list-inside mb-4">
               <li>Customizable portfolios</li>
               <li>Collaboration-first tools</li>
-              <li>Art-focused distraction-free feed</li>
+              <li>Invite-only, small social network by design</li>
+              <li>Art-oriented distraction-free feed</li>
               <li>Opportunities to connect with artists and clients</li>
               <li>Committed to data minimisation</li>
+              <li>Transparent personal data policies</li>
             </ul>
             <p className="mb-2">
-              Join us in revolutionizing the way artists interact online. Stop scrolling, start creating with Modo.
+              Join us in changing the way artists interact online. Stop scrolling, start creating with Modo.
             </p>
             <p className="italic text-gray-600">~ Gabriel</p>
           </div>
@@ -102,11 +109,11 @@ export default function Home() {
               <Card>
                 <CardHeader>
                   <CardTitle>Join as a Beta Tester</CardTitle>
-                  <CardDescription>Be among the first to experience Modo</CardDescription>
+                  <CardDescription>Be the first to experience Modo</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="mb-4">
-                    Help shape the future of Modo by providing valuable feedback during our beta testing phase.
+                    Shape the future of Modo by providing valuable feedback during our beta testing phase.
                   </p>
                   <Button className="w-full" onClick={() => setShowBetaCard(true)}>
                     Apply for Beta Testing
@@ -116,7 +123,7 @@ export default function Home() {
               <Card>
                 <CardHeader>
                   <CardTitle>Join as a Developer</CardTitle>
-                  <CardDescription>Contribute to building Modo</CardDescription>
+                  <CardDescription>Help us build Modo</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="mb-4">
