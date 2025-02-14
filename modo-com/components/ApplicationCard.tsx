@@ -57,7 +57,6 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
 
     if (Object.keys(formErrors).length === 0) {
       setIsLoading(true)
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000))
       console.log("Submitted:", { type, email, role })
       setIsLoading(false)
