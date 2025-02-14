@@ -72,15 +72,8 @@ export default function Home() {
               consumption of disposable media. 
             </p>
             <p className="mb-4">
-              Modo calls its users to find the quiet within the noise.
-            </p>
-            <p className="mb-4">
-              Modo is the ethical social networking platform for artists to showcase their work, connect with 
-              fellow creatives, and find inspiration. 
-            </p>
-            <p className="mb-4">
-               Modo&apos;s mission is to be your space where creativity thrives and artists can focus on what fulfills them the most -
-               creating. We are the sum of what we consume. Mindfully consume allows us to rekindle your love for creation.
+              Modo is the ethical social networking platform that calls its users to find the quiet within the noise, 
+              showcase their work, connect with fellow creatives, and find inspiration. 
             </p>
             <h4 className="text-xl font-semibold mb-2">Key Features:</h4>
             <ul className="list-disc list-inside mb-4">
@@ -92,8 +85,12 @@ export default function Home() {
               <li>Committed to data minimisation</li>
               <li>Transparent personal data policies</li>
             </ul>
+            <p className="mb-4">
+               Modo&apos;s mission is to be your space where creativity thrives and artists can focus on what fulfills them the most -
+               creating. 
+            </p>
             <p className="mb-2">
-              Join us in changing the way artists interact online. Stop scrolling, start creating with Modo.
+              We are the sum of the things we consume. Join us in changing the way artists interact online. Stop scrolling, start creating with Modo.
             </p>
             <p className="italic text-gray-600">~ Gabriel</p>
           </div>
