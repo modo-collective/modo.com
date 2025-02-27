@@ -16,7 +16,7 @@ interface ApplicationCardProps {
 
 export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
   const [email, setEmail] = useState("")
-  const [role, setRole] = useState("")
+  const [role] = useState("") // Update 1: Removed setRole
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
   const [attemptedSubmit, setAttemptedSubmit] = useState(false)
@@ -128,8 +128,8 @@ export function ApplicationCard({ type, onClose }: ApplicationCardProps) {
                     <Heart className="w-12 h-12 text-red-500 mb-4" />
                     <p className="text-lg font-medium mb-2">All developer positions are currently filled</p>
                     <p className="text-gray-500">
-                      We're not hiring at the moment, but we appreciate your interest in joining our team. Thank you for
-                      considering Modo!
+                      We&apos;re not hiring at the moment, but we appreciate your interest in joining our team. Thank
+                      you for considering Modo! {/* Update 2: Fixed unescaped apostrophe */}
                     </p>
                   </div>
                 </CardContent>
